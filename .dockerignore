@@ -1,0 +1,5 @@
+*.exe
+.gitignore
+db.sql
+*.logs
+.git

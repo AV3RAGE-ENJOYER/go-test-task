@@ -1,0 +1,203 @@
+basePath: /api/v1
+definitions:
+  database.SongDetails:
+    properties:
+      group:
+        type: string
+      link:
+        type: string
+      release_date:
+        type: string
+      song:
+        type: string
+      text:
+        type: string
+    type: object
+  handlers.APIError:
+    properties:
+      message:
+        type: string
+    type: object
+  handlers.JSONResult:
+    properties:
+      message: {}
+    type: object
+host: 127.0.0.1:8080
+info:
+  contact:
+    email: andrushathegames@gmail.com
+    name: Andrei Dombrovskii
+  description: This is a test task for Juniour Go Developer in Effective Mobile.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Music library test task
+  version: "1.0"
+paths:
+  /add:
+    post:
+      consumes:
+      - application/json
+      description: Adds new song to database.
+      parameters:
+      - description: Request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/database.SongDetails'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.APIError'
+      summary: Add new song
+      tags:
+      - Info
+  /delete:
+    delete:
+      description: Delete song by its name and group
+      parameters:
+      - description: Song Name
+        in: query
+        name: song
+        required: true
+        type: string
+      - description: Group Name
+        in: query
+        name: group
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: string
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.APIError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.APIError'
+      summary: Delete song
+      tags:
+      - Info
+  /edit:
+    put:
+      consumes:
+      - application/json
+      description: Edit song details.
+      parameters:
+      - description: Request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/database.SongDetails'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/database.SongDetails'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.APIError'
+      summary: Edit song details
+      tags:
+      - Info
+  /info:
+    get:
+      description: |-
+        Get song details by its name and group.
+        Returns all songs if no name or group provided.
+      parameters:
+      - description: Song Name
+        in: query
+        name: song
+        type: string
+      - description: Group Name
+        in: query
+        name: group
+        type: string
+      - description: Start verse
+        in: query
+        name: start
+        type: integer
+      - description: End verse
+        in: query
+        name: end
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/database.SongDetails'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.APIError'
+      summary: Get songs
+      tags:
+      - Info
+  /text:
+    get:
+      description: |-
+        Get song text with pagination by verses.
+        Returns full text if no parameters provided.
+      parameters:
+      - description: Song name
+        in: query
+        name: song
+        required: true
+        type: string
+      - description: Group name
+        in: query
+        name: group
+        required: true
+        type: string
+      - description: Start verse
+        in: query
+        name: start
+        type: integer
+      - description: End verse
+        in: query
+        name: end
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.JSONResult'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.APIError'
+      summary: Get song text with pagination by verses
+      tags:
+      - Info
+swagger: "2.0"
